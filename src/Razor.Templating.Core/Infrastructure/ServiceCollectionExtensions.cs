@@ -6,8 +6,13 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static void AddRazorTemplating(this IServiceCollection services)
         {
+            if(RazorViewToStringRendererFactory.ServiceCollection != null)
+            {
+                RazorViewToStringRendererFactory.ServiceCollection = services;
+                RazorViewToStringRendererFactory.RegisterDependencies();
+            }
+
             RazorViewToStringRendererFactory.ServiceCollection = services;
-            RazorTemplateEngine.Initialize();
         }
     }
 }

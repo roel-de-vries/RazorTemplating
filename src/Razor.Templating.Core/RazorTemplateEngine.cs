@@ -17,7 +17,7 @@ namespace Razor.Templating.Core
         /// </summary>
         public static void Initialize()
         {
-            RazorViewToStringRendererFactory.RegisterDependencies();
+            GetRenderer();
         }
 
         /// <summary>
@@ -28,7 +28,7 @@ namespace Razor.Templating.Core
         {
             if (_razorViewToStringRenderer is null)
             {
-                Initialize();
+                RazorViewToStringRendererFactory.RegisterDependencies();
             }
 
             _razorViewToStringRenderer = RazorViewToStringRendererFactory.CreateRenderer();
