@@ -11,14 +11,13 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Razor.Templating.Core
 {
-    internal class RazorViewToStringRenderer
+    internal class RazorViewToStringRenderer : IRazorViewToStringRenderer
     {
         private readonly IRazorViewEngine _viewEngine;
         private readonly ITempDataProvider _tempDataProvider;
@@ -27,19 +26,19 @@ namespace Razor.Templating.Core
         public RazorViewToStringRenderer(
             IRazorViewEngine viewEngine,
             ITempDataProvider tempDataProvider,
-            IServiceProvider serviceProvider, IHttpContextAccessor contextAccessor, LinkGenerator linkGenerator)
+            IServiceProvider serviceProvider)
         {
             _viewEngine = viewEngine;
             _tempDataProvider = tempDataProvider;
             _serviceProvider = serviceProvider;
         }
 
-        public async Task<string> RenderViewToStringAsync<TModel>([DisallowNull] string viewName, [DisallowNull] TModel model)
+        public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model)
         {
             return await RenderViewToStringAsync(viewName, model, new ViewDataDictionary(new EmptyModelMetadataProvider(), new ModelStateDictionary()));
         }
 
-        public async Task<string> RenderViewToStringAsync<TModel>([DisallowNull] string viewName, [DisallowNull] TModel model, [DisallowNull] ViewDataDictionary viewDataDictionary)
+        public async Task<string> RenderViewToStringAsync<TModel>(string viewName, TModel model, ViewDataDictionary viewDataDictionary)
         {
             var actionContext = GetActionContext();
             var view = FindView(actionContext, viewName);
@@ -79,8 +78,8 @@ namespace Razor.Templating.Core
             var searchedLocations = getViewResult.SearchedLocations.Concat(findViewResult.SearchedLocations);
             var errorMessage = string.Join(
                 Environment.NewLine,
-                new string[] { 
-                    $"Unable to find view '{viewName}'. The following locations were searched:" 
+                new string[] {
+                    $"Unable to find view '{viewName}'. The following locations were searched:"
                 }.Concat(searchedLocations)
                 .Concat(new string[]{
                 "Hint:",

@@ -13,16 +13,19 @@ namespace ExampleWebApp.Net5_0.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IRazorViewToStringRenderer _razorRenderer;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IRazorViewToStringRenderer razorRenderer)
         {
             _logger = logger;
+            _razorRenderer = razorRenderer;
         }
 
         public async Task<IActionResult> Index()
         {
             //Render View From the Web Application
-            var renderedString = await RazorTemplateEngine.RenderAsync("~/Views/Home/Index.cshtml");
+            //var renderedString = await RazorTemplateEngine.RenderAsync("~/Views/Home/Index.cshtml");
+            var renderedString = await _razorRenderer.RenderViewToStringAsync<object>("~/Views/Home/Index.cshtml", default);
             return Ok(renderedString);
         }
 
