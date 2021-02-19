@@ -9,29 +9,13 @@ namespace Razor.Templating.Core
 {
     public static class RazorTemplateEngine
     {
-        private static RazorViewToStringRenderer? _razorViewToStringRenderer;
-
-        /// <summary>
-        /// Creates the cache of RazorViewToStringRenderer. If already initialized, re-initializes.
-        /// </summary>
-        public static void Initialize()
-        {
-            _razorViewToStringRenderer = null;
-            GetRenderer();
-        }
-
         /// <summary>
         /// Get the RazorViewToStringRenderer object from cache if already exists else creates a new object.
         /// </summary>
         /// <returns></returns>
         private static RazorViewToStringRenderer GetRenderer()
         {
-
-            if (_razorViewToStringRenderer is null)
-            {
-                _razorViewToStringRenderer = RazorViewToStringRendererFactory.CreateRenderer();
-            }
-            return _razorViewToStringRenderer;
+            return  RazorViewToStringRendererFactory.CreateRenderer();
         }
 
         /// <summary>

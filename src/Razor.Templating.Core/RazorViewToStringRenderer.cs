@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Razor.Templating.Core
 {
-    internal class RazorViewToStringRenderer : IRazorViewToStringRenderer
+    internal class RazorViewToStringRenderer
     {
         private readonly IRazorViewEngine _viewEngine;
         private readonly ITempDataProvider _tempDataProvider;
