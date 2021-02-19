@@ -12,12 +12,12 @@ namespace Razor.Templating.Core
         private static RazorViewToStringRenderer? _razorViewToStringRenderer;
 
         /// <summary>
-        /// Creates the cache of RazorViewToStringRenderer. If already initialized, re-initializes.
+        /// Speeds up next renders by registering required services.
+        /// Excplicit call is optional, should only be called once during startup.
         /// </summary>
         public static void Initialize()
         {
-            _razorViewToStringRenderer = null;
-            GetRenderer();
+            RazorViewToStringRendererFactory.RegisterDependencies();
         }
 
         /// <summary>
@@ -26,11 +26,12 @@ namespace Razor.Templating.Core
         /// <returns></returns>
         private static RazorViewToStringRenderer GetRenderer()
         {
-
             if (_razorViewToStringRenderer is null)
             {
-                _razorViewToStringRenderer = RazorViewToStringRendererFactory.CreateRenderer();
+                Initialize();
             }
+
+            _razorViewToStringRenderer = RazorViewToStringRendererFactory.CreateRenderer();
             return _razorViewToStringRenderer;
         }
 

@@ -38,12 +38,11 @@ namespace Razor.Templating.Core
                 _serviceCollection = value;
             }
         }
+
         /// <summary>
-        /// Returns the instance of RazorViewToStringRenderer by resolving all the dependencies required to 
-        /// successfully render the razor views to string.
+        /// Registers all the dependencies required for the <see cref="RazorViewToStringRenderer"/> service.
         /// </summary>
-        /// <returns></returns>
-        public static RazorViewToStringRenderer CreateRenderer()
+        public static void RegisterDependencies()
         {
             var services = ServiceCollection;
 
@@ -89,8 +88,19 @@ namespace Razor.Templating.Core
             {
                 o.FileProviders.Add(fileProvider);
             });
-            services.TryAddSingleton<RazorViewToStringRenderer>();
+            services.TryAddTransient<RazorViewToStringRenderer>();
 
+            ServiceCollection = services;
+        }
+
+        /// <summary>
+        /// Returns the instance of RazorViewToStringRenderer by resolving all the dependencies required to 
+        /// successfully render the razor views to string.
+        /// </summary>
+        /// <returns></returns>
+        public static RazorViewToStringRenderer CreateRenderer()
+        {
+            var services = ServiceCollection;
             var provider = services.BuildServiceProvider();
             return provider.GetRequiredService<RazorViewToStringRenderer>();
         }
